@@ -1,0 +1,38 @@
+@startuml
+
+skinparam linetype ortho
+left to right direction
+hide circle
+
+entity "categories" as categories {
+    + id :<<PK>>
+    --
+    name : STRING
+    description : STRING
+}
+
+entity "products" as products {
+    + id :  <<PK>>
+    --
+    name : STRING
+    quantity : INTEGER
+    price : BIGDECIMAL
+    isOutOfStock : BOOLEAN
+    description : STRING
+    category_id : LONG <<FK>>
+}
+
+entity "product_images" as productImages {
+    + id :  <<PK>>
+    --
+    product_id : LONG <<FK>>
+    imageURL : STRING
+}
+
+' Define one-to-many relationships
+categories ||--o{ products
+products   ||--o{ productImages
+
+@enduml
+
+
