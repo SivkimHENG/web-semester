@@ -20,8 +20,9 @@ class Category extends Model
         'description' => 'string',
     ];
 
-    public function product(): HasMany
+    public function products(): HasMany
     {
-        return $this->hasMany(Product::class, 'product_id');
+        return $this->hasMany(Product::class, 'category_id');
     }
+
 }

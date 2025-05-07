@@ -3,70 +3,45 @@
 namespace App\Livewire;
 
 use App\Models\User;
+use Error;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 
 class UserRegistration extends Component
 {
-    public $username;
+    public $name;
 
     public $password;
 
+    public $password_confirmation;
     public $email;
 
-    public $confirmation_password;
+    protected $rules = [
+        'name' => 'required|string|min:6',
+        'email' => 'required|email|max:255|unique:users',
+        'password' => 'required|min:8|confirmed',
+    ];
 
-    public $user;
-
-    public function registrationStore(Request $request)
+    public function registrationStore()
     {
-        $request->validate([
-            'username' => 'required|max:255|min:6',
-            'email' => 'required|max:255|min:10',
-            'password' => 'required',
-        ]);
-
-        $this->password = Hash::make($this->password);
+        $validated = $this->validate();
+        $validated['password'] = Hash::make($validated['password']);
         User::create([
-            'username' => $this->username,
-            'email' => $this->email,
-            'password' => $this->password,
+            'name'     => $validated['name'],
+            'email'    => $validated['email'],
+            'password' => $validated['password'],
+            'roles'    => 'user',
         ]);
-
         session()->flash('message', 'User Created');
-
         return redirect()->to('/dashboard');
     }
 
     public function render()
     {
-        return <<<'HTML'
-            <div>
-                <form wire:submit.prevent="update">
-                    <label>Username</label>
-                    <input type="text" wire:model="username" placeholder="Entering Username..." />
-                    @error('username')
-                        <span class="text-red-500" role="alert">{{ $message }}</span>
-                    @enderror
-                    <label>Email</label>
-                    <input type="email" wire:model="email" placeholder="Entering Email..." />
-                    @error('email')
-                        <span class="text-red-500" role="alert">{{ $message }}</span>
-                    @enderror
-                    <label>Password</label>
-                    <input type="password" wire:mode="password"  placeholder="Entering Password..." />
-                    @error('password')
-                        <span class="text-red-500" role="alert">{{ $message }}</span>
-                    @enderror
-                    <label>Confirmation Password</label>
-                    <input type="password" wire:mode="passwordConfirmation" placeholder="Entering Confirmation..." />
-                    @error('passwordConfirmation')
-                        <span class="text-red-500" role="alert">{{ $message }}</span>
-                    @enderror
-                    <button wire:click="$emit('registrationStore')">Create</button>
-                </form>
-        </div>
-        HTML;
+        return view('livewire.user-registration')->layout('components.layouts.app');
     }
 }
+
+
+
