@@ -17,12 +17,16 @@ class DatabaseSeeder extends Seeder
     {
 
         $categories = Category::factory()
-            ->count(40)
+            ->count(10)
             ->create();
+
+        Product::factory()->count(50)->create();
+
+
 
         $categories->each(function ($category) {
             Product::factory()
-                ->count(10)
+                ->count(20)
                 ->create([
                     'category_id' => $category->id,
                 ]);

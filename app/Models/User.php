@@ -20,7 +20,9 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'avatar_image',
         'password',
+        'credit_score',
     ];
 
     /**
@@ -30,6 +32,7 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
+        'roles',
         'remember_token',
     ];
 
@@ -45,4 +48,20 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+
+    public function getAvatarUrlAttribute()
+    {
+        return asset('storage/' .$this->avatar_image);
+    }
+
+    public function getDefaultAvatarUrlAttribute()
+    {
+        $name = trim(collect(explode('', $this->name))->map(function($segment){
+            return mb_substr($segment,0,1);
+        })->join(''));
+        return "https://ui-avatars.com/api/?name=".urlencode($name);
+    }
+
+
 }

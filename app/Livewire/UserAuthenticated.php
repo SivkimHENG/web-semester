@@ -11,15 +11,22 @@ class UserAuthenticated extends Component
 
     public $password;
 
+    public $remember = false;
+
     protected $rules = [
         'email' => 'required|email',
         'password' => 'required',
     ];
 
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
+    }
+
     public function authenticating()
     {
         $this->validate();
-        if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
+        if (Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
             session()->regenerate();
 
             if (Auth::user()->roles == 'admin') {

@@ -14,7 +14,7 @@
     - DELETE: /products/{id}
 
 
-[x] 
+[ ] 
 - **Category**
     - GET: /categories
     - GET: /categories
@@ -22,7 +22,7 @@
     - PUT: /categories/{id}
     - DELETE: /categories/{id}
 
-[]
+[x]
 - **Product Image**
     - GET: /productImages
     - GET: /productImages
@@ -31,7 +31,10 @@
     - DELETE: /productImages/{id}
 
 
-### Tracking User account & credit score for buy products 
 
+
+
+### Tracking User account & credit score for buy products 
+### Preview of the items in Product page
 
 

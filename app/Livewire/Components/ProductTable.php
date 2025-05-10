@@ -4,12 +4,18 @@ namespace App\Livewire\Components;
 
 use App\Models\Category;
 use App\Models\Product;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class ProductTable extends Component
 {
+    use WithFileUploads;
+
     public $title = 'Edit the product';
 
+    #[Validate('image|max:1024')]
+    public $image;
 
     public $selectedProductId;
 
@@ -29,12 +35,12 @@ class ProductTable extends Component
 
     public $selectedCategory = '';
 
+    public $existingImage;
+
     protected $listeners = [
         'search-updated' => 'handleSearchUpdated',
         'category-updated' => 'handleCategoryUpdated',
     ];
-
-
 
     public function handleSearchUpdated($search)
     {
@@ -45,12 +51,6 @@ class ProductTable extends Component
     {
         $this->selectedCategory = $category;
     }
-
-
-
-
-
-
 
     protected function rules()
     {
@@ -63,26 +63,37 @@ class ProductTable extends Component
             'quantity' => 'required|integer|min:0',
             'price' => 'required|numeric|min:0',
             'is_out' => 'boolean',
+            'image' => 'nullable|image|max:1024',
             'description' => 'required|string|max:255|min:1',
-            'category_id' => 'nullable|exists:categories,id',
+            'category_id' => 'required|exists:categories,id',
         ];
     }
 
-    public function save()
+    public function store()
     {
 
         $this->validate();
 
-        Product::create([
+        $data = [
             'product_name' => $this->product_name,
+            'image' => $this->image,
             'quantity' => $this->quantity,
             'price' => $this->price,
             'is_out' => $this->is_out,
             'description' => $this->description,
             'category_id' => $this->category_id,
-        ]);
+        ];
+
+        if ($this->image) {
+            $path = $this->image->store('photos', 'public');
+            $data['image'] = $path;
+
+        }
+        Product::create($data);
         session()->flash('message', 'Product Created Successfully');
-        $this->resetForm();
+
+        return redirect()->to('/admin/dashboard');
+
     }
 
     public function edit(int $id)
@@ -93,6 +104,7 @@ class ProductTable extends Component
             $this->selectedProductId = $product->id;
             $this->product_name = $product->product_name;
             $this->quantity = $product->quantity;
+            $this->existingImage = $product->image;
             $this->price = $product->price;
             $this->is_out = $product->is_out;
             $this->description = $product->description;
@@ -101,7 +113,6 @@ class ProductTable extends Component
             session()->flash('message', 'Product not found');
         }
     }
-
 
     public function update()
     {
@@ -114,17 +125,25 @@ class ProductTable extends Component
         try {
             $product = Product::findOrFail($this->selectedProductId);
 
-            $product->update([
+            $data = [
                 'product_name' => $this->product_name,
                 'quantity' => $this->quantity,
                 'price' => $this->price,
                 'is_out' => $this->is_out,
                 'description' => $this->description,
                 'category_id' => $this->category_id,
-            ]);
+            ];
+            if ($this->image) {
+                $path = $this->image->store('photos', 'public');
+                $data['image'] = $path;
+            } else {
+                $data['image'] = $this->existingImage;
 
-            redirect()->to('admin/dashboard');
+            }
+
+            $product->update($data);
             session()->flash('message', 'Product updated successfully!');
+            redirect()->to('admin/dashboard');
             $this->resetForm();
         } catch (\Exception $e) {
             session()->flash('error', 'Failed to update product.');
@@ -147,6 +166,7 @@ class ProductTable extends Component
             'is_out',
             'description',
             'category_id',
+            'image',
         ]);
     }
 
@@ -170,5 +190,4 @@ class ProductTable extends Component
             'allCategories' => Category::all(),
         ])->layout('components.layouts.admin');
     }
-
 }

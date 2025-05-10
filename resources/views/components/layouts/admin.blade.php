@@ -13,23 +13,24 @@
 <body class="bg-white font-sans leading-normal tracking-normal">
 
 
-<nav class="bg-white border-gray-200 py-8 dark:bg-gray-900">
-    <div class="flex flex-wrap items-center justify-between max-w-screen-xl px-4 mx-auto">
-        <a href='{{ route("admin.dashboard")}}' class="flex items-center">
-            <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Admin Panel</span>
-        </a>
-        <div class="flex items-center lg:order-2">
-            <div class="hidden mt-2 mr-4 sm:inline-block">
-                <span>Product</span>
+    <nav class="bg-white border-gray-200 py-8 dark:bg-gray-900">
+        <div class="flex flex-wrap items-center justify-between max-w-screen-xl px-4 mx-auto">
+            <a href='{{ route('admin.dashboard') }}' class="flex items-center" wire:navigate>
+                <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Admin Panel</span>
+            </a>
+            <div class="flex items-center lg:order-2">
+                <div class="hidden mt-2 mr-4 p-3 sm:inline-block text-gray-100 ">
+                    <a class="p-5 hover:text-stone-400 cursor-pointer" href="products" wire:navigate>Product</a>
+                    <a class="p-5 hover:text-stone-400 cursor-pointer" href="userlists" wire:navigate>User</a>
+                </div>
+            </div>
+            <div class="items-center justify-between w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu-2">
+                <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
+
+                </ul>
             </div>
         </div>
-        <div class="items-center justify-between w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu-2">
-            <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
-
-            </ul>
-        </div>
-    </div>
-</nav>
+    </nav>
 
 
     <main>

@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 class Dashboard extends Component
@@ -11,3 +12,5 @@ class Dashboard extends Component
         return view('livewire.dashboard')->layout("components.layouts.auth");
     }
 }
+
+

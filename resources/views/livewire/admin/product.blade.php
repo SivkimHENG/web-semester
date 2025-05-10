@@ -1,74 +1,75 @@
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    @if (session()->has('message'))
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-            {{ session('message') }}
+<div class="bg-gray-50 py-10 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Section Header -->
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                Our Products
+            </h2>
         </div>
-    @endif
 
-    <form wire:submit.prevent="update" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <div class="grid grid-cols-1 gap-6">
-            <!-- Product Name -->
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
-                    Product Name
-                </label>
-                <input wire:model="name" type="text" id="name"
-                    class="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-            </div>
+        <!-- Product Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            @foreach ($products as $product)
+                <div class="group relative bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col h-full transform hover:-translate-y-1">
+                    <!-- Badge --> @if ($product->is_out)
+                        <div class="absolute top-4 right-4 z-10"> <span class="bg-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
+                                Out of Stock
+                            </span>
+                        </div>
+                @else
+                <div class="absolute top-4 right-4 z-10">
+                    <span class="bg-green-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
+                        In Stock
+                            </span>
+                        </div>
+                    @endif
 
-            <!-- Quantity and Price -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="quantity">
-                        Quantity
-                    </label>
-                    <input wire:model="quantity" type="number" id="quantity"
-                        class="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <!-- Product Image with Overlay -->
+                    <div class="relative overflow-hidden">
+                        <div class="aspect-w-4 aspect-h-3">
+                            <img
+                                src="{{ asset('storage/' . $product->image) }}"
+                                alt="{{ $product->product_name }}"
+                                class="h-64 w-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
+                            >
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+
+                    <!-- Product Content -->
+                    <div class="flex-grow p-6 flex flex-col">
+                        <!-- Category Tag -->
+                        <div class="mb-3">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                                {{ $product->category->name ?? 'Uncategorized' }}
+                            </span>
+                        </div>
+
+                        <!-- Product Title & Price -->
+                        <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-indigo-600 transition-colors">
+                            {{ $product->product_name }}
+                        </h3>
+
+                        <!-- Shortened Description with Truncation -->
+                        <p class="text-sm text-gray-600 mb-4 line-clamp-2">
+                            {{ $product->description }}
+                        </p>
+
+                        <!-- Product Specs -->
+                        <div class="mt-auto">
+                            <div class="flex items-center justify-between py-3 border-t border-gray-100">
+                                <div class="flex items-center">
+                                    <svg class="h-5 w-5 text-indigo-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    <span class="text-sm text-gray-700">{{ $product->quantity }} in stock</span>
+                                </div>
+                                <span class="text-xl font-bold text-indigo-600">${{ number_format($product->price, 2) }}</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="price">
-                        Price ($)
-                    </label>
-                    <input wire:model="price" type="number" step="0.01" id="price"
-                        class="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                </div>
-            </div>
-
-            <!-- Out of Stock Checkbox -->
-            <div class="mb-4 flex items-center">
-                <input wire:model="is_out" type="checkbox" id="is_out"
-                    class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                <label for="is_out" class="ml-2 block text-sm text-gray-900">
-                    Mark as Out of Stock
-                </label>
-            </div>
-
-            <!-- Category -->
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="category">
-                    Category
-                </label>
-                <input wire:model="category" type="text" id="category"
-                    class="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-            </div>
-
-            <!-- Description -->
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
-                    Description
-                </label>
-                <textarea wire:model="description" id="description" rows="4"
-                    class="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
-            </div>
-
-            <!-- Submit Button -->
-            <div class="flex items-center justify-end">
-                <button type="submit"
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                    Update Product
-                </button>
-            </div>
+            @endforeach
         </div>
-    </form>
+    </div>
 </div>
