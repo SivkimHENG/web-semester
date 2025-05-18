@@ -1,9 +1,4 @@
-
-
-# Endpoints
-
-
-## Admin Access only
+# Wirer - Admin Product Management
 
 [x]
 - **Product**
