@@ -12,7 +12,7 @@ use App\Livewire\UserRegistration;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
-Route::view('/', 'welcome')->name('home');
+Route::redirect('/', '/register')->name('home');
 
 Route::prefix('admin')
     ->name('admin.')
