@@ -34,7 +34,4 @@
 
 
 
-### Tracking User account & credit score for buy products 
-### Preview of the items in Product page
-
 
