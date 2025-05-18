@@ -12,126 +12,119 @@
     @endif
 
 
-
-    <div class="mt-10 mb-5 pl-5">
-
-        <div x-data="{ createModalOpen: false }" class="mb-5" @keydown.escape.window="createModalOpen = false">
-            <button @click="$wire.resetForm(); createModalOpen = true"
-                class="bg-green-500 px-5 py-3 text-gray-100 hover:bg-green-800 transition-colors border rounded-md">
-                Create New Product
-            </button>
-
-            <template x-teleport="body">
-                <div x-show="createModalOpen" x-cloak class="fixed inset-0 z-50 flex items-center justify-center">
-                    <!-- backdrop -->
-                    <div @click="createModalOpen = false" x-show="createModalOpen" x-transition.opacity
-                        class="absolute inset-0 backdrop-blur-md bg-opacity-50"></div>
-                    <div x-show="createModalOpen" x-trap="createModalOpen" x-transition
-                        class="relative bg-white rounded-lg shadow-lg w-full max-w-lg p-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold">Create New Product</h3>
-                            <button @click="createModalOpen = false" class="text-gray-600 hover:text-gray-800">
-                                ✕
-                            </button>
-                        </div>
-
-                        <!-- Livewire form -->
-                        <form wire:submit.prevent="store" class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium">Name</label>
-                                <input type="text" wire:model.defer="product_name"
-                                    class="mt-1 block w-full border rounded px-3 py-2">
-                                @error('product_name')
-                                    <span class="text-red-600 text-sm">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium">Quantity</label>
-                                    <input type="number" wire:model.defer="quantity" min="0"
-                                        class="mt-1 block w-full border rounded px-3 py-2">
-                                    @error('quantity')
-                                        <span class="text-red-600 text-sm">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium">Price</label>
-                                    <input type="number" wire:model.defer="price" step="0.01" min="0"
-                                        class="mt-1 block w-full border rounded px-3 py-2">
-                                    @error('price')
-                                        <span class="text-red-600 text-sm">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="flex items-center space-x-2">
-                                <input type="checkbox" wire:model.defer="is_out" id="create_is_out_checkbox"
-                                    class="h-4 w-4">
-                                <label for="create_is_out_checkbox" class="text-sm">Out of Stock</label>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium">Description</label>
-                                <textarea wire:model.defer="description" rows="3" class="mt-1 block w-full border rounded px-3 py-2"></textarea>
-                                @error('description')
-                                    <span class="text-red-600 text-sm">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium">Category</label>
-                                <select wire:model.defer="category_id"
-                                    class="mt-1 block w-full border rounded px-3 py-2">
-                                    <option value="">— none —</option>
-                                    @foreach ($categories as $id => $name)
-                                        <option value="{{ $id }}">{{ $name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('category_id')
-                                    <span class="text-red-600 text-sm">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <label for="File"
-                                class="block rounded border border-gray-300 p-4 text-gray-900 shadow-sm sm:p-6">
-                                <div class="flex items-center justify-center gap-4">
-                                    <span class="font-medium"> Upload your photo </span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke-width="1.5" stroke="currentColor" class="size-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M7.5 7.5h-.75A2.25 2.25 0 0 0 4.5 9.75v7.5a2.25 2.25 0 0 0 2.25 2.25h7.5a2.25 2.25 0 0 0 2.25-2.25v-7.5a2.25 2.25 0 0 0-2.25-2.25h-.75m0-3-3-3m0 0-3 3m3-3v11.25m6-2.25h.75a2.25 2.25 0 0 1 2.25 2.25v7.5a2.25 2.25 0 0 1-2.25 2.25h-7.5a2.25 2.25 0 0 1-2.25-2.25v-.75" />
-                                    </svg>
-                                </div>
-                                <input type="file" wire:model="image" id="File" class="sr-only" />
-                                @error('image')
-                                    <span class="text-red-600 text-sm">{{ $message }}</span>
-                                @enderror
-                            </label>
-
-
-
-                            <div class="flex justify-end space-x-2">
-                                <button type="button" @click="createModalOpen = false"
-                                    class="px-4 py-2 border rounded hover:bg-gray-100">
-                                    Cancel
-                                </button>
-                                <button type="submit"
-                                    @click="$wire.store().then(() => { if (!$wire.hasErrors) createModalOpen = false })"
-                                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-                                    Create Product
-                                </button>
-                            </div>
-                        </form>
-
-                    </div>
-                </div>
-            </template>
-            <div class="mt-5">
-                <livewire:components.search-filter />
-            </div>
-
+       <div class="mt-10 mb-5 pl-5">
+    <div class="flex gap-4 items-center mb-5">
+        <div>
+            <livewire:components.category-modal/>
         </div>
+        
+<div x-data="{ createModalOpen: false }" @keydown.escape.window="createModalOpen = false">
+    <button @click="$wire.resetForm(); createModalOpen = true"
+        class="bg-green-500 px-3 py-4 text-gray-100 hover:bg-green-800 transition-colors border rounded">
+        Create New Product
+    </button>
+
+    <template x-teleport="body">
+        <div x-show="createModalOpen" x-cloak class="fixed inset-0 z-50 flex items-center justify-center">
+            <!-- backdrop -->
+            <div @click="createModalOpen = false" x-show="createModalOpen" x-transition.opacity
+                class="absolute inset-0 backdrop-blur-md  bg-opacity-50"></div>
+            <div x-show="createModalOpen" x-trap.noscroll="createModalOpen" x-transition
+                class="relative bg-white rounded-lg shadow-lg w-full max-w-lg p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold">Create New Product</h3>
+                    <button type="button" @click="createModalOpen = false" class="text-gray-600 hover:text-gray-800 focus:outline-none">
+                        ✕
+                    </button>
+                </div>
+                <form wire:submit.prevent="store" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium">Name</label>
+                        <input type="text" wire:model.defer="product_name"
+                            class="mt-1 block w-full border rounded px-3 py-2">
+                        @error('product_name')
+                            <span class="text-red-600 text-sm">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium">Quantity</label>
+                            <input type="number" wire:model.defer="quantity" min="0"
+                                class="mt-1 block w-full border rounded px-3 py-2">
+                            @error('quantity')
+                                <span class="text-red-600 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium">Price</label>
+                            <input type="number" wire:model.defer="price" step="0.01" min="0"
+                                class="mt-1 block w-full border rounded px-3 py-2">
+                            @error('price')
+                                <span class="text-red-600 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" wire:model.defer="is_out" id="create_is_out_checkbox"
+                            class="h-4 w-4">
+                        <label for="create_is_out_checkbox" class="text-sm">Out of Stock</label>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium">Description</label>
+                        <textarea wire:model.defer="description" rows="3" class="mt-1 block w-full border rounded px-3 py-2"></textarea>
+                        @error('description')
+                            <span class="text-red-600 text-sm">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium">Category</label>
+                        <select wire:model.defer="category_id"
+                            class="mt-1 block w-full border rounded px-3 py-2">
+                            <option value="">— none —</option>
+                            @foreach ($categories as $id => $name)
+                                <option value="{{ $id }}">
+                                    {{ $name }}</option>
+                            @endforeach
+                        </select>
+                        @error('category_id')
+                            <span class="text-red-600 text-sm">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <label for="File"
+                        class="block rounded border border-gray-300 p-4 text-gray-900 shadow-sm sm:p-6">
+                        <div class="flex items-center justify-center gap-4">
+                            <span class="font-medium"> Upload your photo </span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M7.5 7.5h-.75A2.25 2.25 0 0 0 4.5 9.75v7.5a2.25 2.25 0 0 0 2.25 2.25h7.5a2.25 2.25 0 0 0 2.25-2.25v-7.5a2.25 2.25 0 0 0-2.25-2.25h-.75m0-3-3-3m0 0-3 3m3-3v11.25m6-2.25h.75a2.25 2.25 0 0 1 2.25 2.25v7.5a2.25 2.25 0 0 1-2.25 2.25h-7.5a2.25 2.25 0 0 1-2.25-2.25v-.75" />
+                            </svg>
+                        </div>
+                        <input type="file" wire:model="image" id="File" class="sr-only" />
+                        @error('image')
+                            <span class="text-red-600 text-sm">{{ $message }}</span>
+                        @enderror
+                    </label>
+                    <div class="flex justify-end space-x-2">
+                        <button type="button" @click="createModalOpen = false"
+                            class="px-4 py-2 border rounded hover:bg-gray-100">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                            @click="$wire.store().then(() => { if (!$wire.hasErrors) createModalOpen = false })"
+                            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                            Create Product
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </template>
+</div>
+    </div>
+        <livewire:components.search-filter />
+
+
 
 
         <table class="min-w-full divide-y-2 divide-gray-200">

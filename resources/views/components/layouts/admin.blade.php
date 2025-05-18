@@ -21,7 +21,6 @@
             <div class="flex items-center lg:order-2">
                 <div class="hidden mt-2 mr-4 p-3 sm:inline-block text-gray-100 ">
                     <a class="p-5 hover:text-stone-400 cursor-pointer" href="products" wire:navigate>Product</a>
-                    <a class="p-5 hover:text-stone-400 cursor-pointer" href="userlists" wire:navigate>User</a>
                 </div>
             </div>
             <div class="items-center justify-between w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu-2">
